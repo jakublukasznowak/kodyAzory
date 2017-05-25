@@ -1,5 +1,5 @@
 % Jakub Nowak 2016 09 27
-% dupa dupa dupa
+% zamiast dupy new branch
 
 function x = importUFT(filename,range,Nchannels)
 

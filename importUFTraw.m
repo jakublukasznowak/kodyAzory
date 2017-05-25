@@ -1,7 +1,17 @@
-% Jakub Nowak 2016 09 27
-% zamiast dupy new branch
+% Jakub Nowak 201705
 
-function x = importUFT(filename,range,Nchannels)
+% INPUT
+%    filename - binary file saved by DAC on SD card
+%    range - voltage range [V] set on DAC (e.g. 1 V, 5 V)
+%    Nchannels - number of channels used
+%
+% OUTPUT
+%    x - matrix with columns corresponding to consecutive channels
+%
+% Callibration coefficients were obtained for ranges 1V and 5V by comparison
+% with .csv output file produced by DAQLog software.
+
+function x = importUFTraw(filename,range,Nchannels)
 
 f=fopen(filename);
 fseek(f,2*16^3,'bof');

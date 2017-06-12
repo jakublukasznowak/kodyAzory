@@ -12,6 +12,6 @@ Jakub Nowak, Institute of Geophysics, University of Warsaw
     1. import raw binary data [importUFTraw]
     2. synchronize time comparing one base variable collected by UFT's DAQ and one reference variable from ACTOS aquisition system (e.g. 'upV' and 'sonicPRT' for upper UFT voltage and PT thermometer) [findDelay]
     3. callibrate UFT temperature readings versus reference instrument onboard ACTOS [polyCalib]
-3. look at time series plots of different quantities for selected segements of the flight [plotTimeSegment]
-4. examine power spectral density of the instruments [spectra]
+3. look at time series plots of different quantities for selected segements of the flight [plotSegments]
+4. examine power spectral density of the instruments [spectrum,plotSpectra]
         

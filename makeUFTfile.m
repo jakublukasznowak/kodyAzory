@@ -1,13 +1,19 @@
-% Jakub Nowak 201705
+% Jakub Nowak 201706
 
 % Imports UFT data from raw binary file, synchronises time, performs
-% callibration with reference ACTOS termometer and stores information in 
+% callibration with reference ACTOS thermometer and stores information in 
 % one .mat file.
 
 
-rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161005_1327.dat';
-actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight01.mat';
-output='/home/pracownicy/jnowak/uft/dataWinningen/uft_flight01.mat';
+%prefix='flight01';
+prefix='flight02';
+%rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161005_1327.dat';
+rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161006_1210.dat';
+%actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight01.mat';
+actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight02.mat';
+output='/home/pracownicy/jnowak/uft/dataWinningen';
+outputplots='/home/pracownicy/jnowak/uft/report/plots';
+
 
 
 % load ACTOS
@@ -49,7 +55,7 @@ refPress=average(actos.pressure,actos.samp/ssamp,'s');
 sel=(refPress<0.99*max(refPress));
 
 % find delay between base and reference
-delay=findDelay(refSig(sel),baseSig(sel),maxDelay*ssamp);
+delay=findDelay(refSig(sel),baseSig(sel),maxDelay*ssamp,[outputplots,filesep,prefix,'sync.png']);
 
 % save info and results
 uft.sync=struct('ref',refVar,'base',baseVar,'samp',ssamp,...
@@ -95,8 +101,8 @@ sel=find(all([refPress<0.99*max(refPress) ~cloudmask],2));
 
 % calibrate
 delay=round(uft.sync.timeDelay*csamp);
-upP=polyCalib(baseUpV(sel-delay),refT(sel),1);
-lowP=polyCalib(baseLowV(sel-delay),refT(sel),1);
+upP=polyCalib(baseUpV(sel-delay),refT(sel),1,[outputplots,filesep,prefix,'upcalib.png']);
+lowP=polyCalib(baseLowV(sel-delay),refT(sel),1,[outputplots,filesep,prefix,'lowcalib.png']);
 uft.upT=polyval(upP,uft.upV);
 uft.lowT=polyval(lowP,uft.lowV);
 uft=rmfield(uft,{'upV','lowV'});
@@ -121,4 +127,4 @@ uft.lowT_av=average(uft.lowT,M,'s');
 
 %% save to file
 
-save(output,'-struct','uft')
+%save([output,filesep,'uft_',prefix],'-struct','uft')

@@ -1,4 +1,4 @@
-% Jakub Nowak 201705
+% Jakub Nowak 201706
 
 % Stores all relevant parameters from ACTOS aquisition system in one .mat
 % file. Needs path to the folder with raw .bin and preprocessed .lev1 ACTOS

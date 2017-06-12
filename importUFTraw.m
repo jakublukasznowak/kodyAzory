@@ -1,4 +1,4 @@
-% Jakub Nowak 201705
+% Jakub Nowak 201706
 
 % INPUT
 %    filename - binary file saved by DAC on SD card

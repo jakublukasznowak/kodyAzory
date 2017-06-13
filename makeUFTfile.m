@@ -5,14 +5,14 @@
 % one .mat file.
 
 
-%prefix='flight01';
-prefix='flight02';
-%rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161005_1327.dat';
-rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161006_1210.dat';
-%actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight01.mat';
-actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight02.mat';
+prefix='flight01';
+%prefix='flight02';
+rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161005_1327.dat';
+%rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161006_1210.dat';
+actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight01.mat';
+%actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight02.mat';
 output='/home/pracownicy/jnowak/uft/dataWinningen';
-outputplots='/home/pracownicy/jnowak/uft/report/plots';
+outputplots='/home/pracownicy/jnowak/uft/raport/plots';
 
 
 

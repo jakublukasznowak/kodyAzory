@@ -11,7 +11,7 @@ else
     N1=N;
 end
 
-width=16; height=7;
+width=16; height=6.5;
 f=figure('Color','white','PaperUnits','centimeters',...
     'PaperSize',[21 29.7],'PaperPosition',[(21-width)/2 29.7-2.5-height width height]);
 ax=axes('Color','none','FontSize',8,'Position',[0.10 0.13 0.80 0.83]);

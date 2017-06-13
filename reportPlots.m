@@ -4,7 +4,7 @@ path='/home/pracownicy/jnowak/uft/dataWinningen';
 output='/home/pracownicy/jnowak/uft/raport/plots';
 
 frm='png';
-position='h';
+position='h!p!b!t';
 
 ssT={{'1','2','3'},{'A1','C1','C2','A2','A3','C3'}};
 timeSegT={[700 750;
@@ -48,7 +48,7 @@ uft.time_av=uft.time_av-timeTakeOff+1/uft.samp_av;
 %% plot segments
 
 for sn=1:N
-    fprintf('\\subsubsection{Segment %s (%04d-%04d s)}\n\n',ss{sn},timeSeg(sn,1),timeSeg(sn,2))
+    fprintf('\\newpage\n\\subsubsection{Segment %s (%04d-%04d s)}\n\n',ss{sn},timeSeg(sn,1),timeSeg(sn,2))
     
     % time plots
     fileName=[prefix,num2str(sn,'seg%02d')];
@@ -82,8 +82,8 @@ for sn=1:N
     
     suffixes={'temp','humid'};
     captions1=sprintf('Flight %d, segment %s. ',fn,ss{sn});
-    captions2={'Temperature spectrum.',...
-        'Humidity spectrum.'};
+    captions2={'Power spectral density of temperature fluctuations.',...
+        'Power spectral density of humidity fluctuations.'};
     labels1=sprintf('%d:seg%s:psd',fn,ss{sn});
     for j=1:2
         fprintf(['\\begin{figure}[%s]\n',...
@@ -134,8 +134,8 @@ close all
 
 suffixes={'temp','humid'};
 captions1=sprintf('Flight %d. ',fn);
-captions2={'Temperature spectrum.',...
-    'Humidity spectrum.'};
+captions2={'Power spectral density of temperature fluctuations.',...
+    'Power spectral density of humidity fluctuations.'};
 labels1=sprintf('%d:psd',fn);
 for j=1:2
     fprintf(['\\begin{figure}[%s]\n',...

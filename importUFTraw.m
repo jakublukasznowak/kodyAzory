@@ -3,7 +3,7 @@
 % INPUT
 %    filename - binary file saved by DAC on SD card
 %    range - voltage range [V] set on DAC (e.g. 1 V, 5 V)
-%    Nchannels - number of channels used
+%    Nch - number of channels used
 %
 % OUTPUT
 %    x - matrix with columns corresponding to consecutive channels
@@ -11,7 +11,7 @@
 % Callibration coefficients were obtained for ranges 1V and 5V by comparison
 % with .csv output file produced by DAQLog software.
 
-function x = importUFTraw(filename,range,Nchannels)
+function x = importUFTraw(filename,range,Nch)
 
 f=fopen(filename);
 fseek(f,2*16^3,'bof');
@@ -29,7 +29,8 @@ end
 
 x=a*fread(f,'uint16','l')+b;
 
-x=reshape(x,Nchannels,floor(length(x)/Nchannels))';
+Na=floor(length(x)/Nch);
+x=reshape(x(1:Nch*Na),Nch,Na)';
 
 fclose(f);
 

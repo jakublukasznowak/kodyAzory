@@ -11,6 +11,7 @@
 %
 % OUTPUT
 %    p - fitted polynomial of selected order
+%    pe - polynomial coefficients error
 %    fig - figure handle
 %    ax - axes handle
 

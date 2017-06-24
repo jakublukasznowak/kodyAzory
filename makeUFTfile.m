@@ -5,12 +5,12 @@
 % one .mat file.
 
 
-prefix='flight01';
-%prefix='flight02';
-rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161005_1327.dat';
-%rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161006_1210.dat';
-actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight01.mat';
-%actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight02.mat';
+%prefix='flight01';
+prefix='flight02';
+%rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161005_1327.dat';
+rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161006_1210.dat';
+%actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight01.mat';
+actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight02.mat';
 output='/home/pracownicy/jnowak/uft/dataWinningen';
 outputplots='/home/pracownicy/jnowak/uft/raport/plots';
 
@@ -101,15 +101,15 @@ sel=find(all([refPress<0.99*max(refPress) ~cloudmask],2));
 
 % calibrate
 delay=round(uft.sync.timeDelay*csamp);
-upP=polyCalib(baseUpV(sel-delay),refT(sel),1,[outputplots,filesep,prefix,'upcalib.png']);
-lowP=polyCalib(baseLowV(sel-delay),refT(sel),1,[outputplots,filesep,prefix,'lowcalib.png']);
+[upP,upPe]=polyCalib(baseUpV(sel-delay),refT(sel),1,[outputplots,filesep,prefix,'upcalib.png']);
+[lowP,lowPe]=polyCalib(baseLowV(sel-delay),refT(sel),1,[outputplots,filesep,prefix,'lowcalib.png']);
 uft.upT=polyval(upP,uft.upV);
 uft.lowT=polyval(lowP,uft.lowV);
 uft=rmfield(uft,{'upV','lowV'});
 
 % save info
 uft.calib=struct('ref',refVar,'samp',csamp,'maskLWCthresh',maskLWCthresh,...
-    'maskLWCdill',maskLWCdill,'upP',upP,'lowP',lowP);
+    'maskLWCdill',maskLWCdill,'upP',upP,'lowP',lowP,'upPe',upPe','lowPe',lowPe);
 
 
 
@@ -127,4 +127,4 @@ uft.lowT_av=average(uft.lowT,M,'s');
 
 %% save to file
 
-%save([output,filesep,'uft_',prefix],'-struct','uft')
+save([output,filesep,'uft_',prefix],'-struct','uft')

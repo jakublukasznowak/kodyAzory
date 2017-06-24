@@ -14,11 +14,12 @@
 %    fig - figure handle
 %    ax - axes handle
 
-function [p,fig,ax] = polyCalib(x,y,n,printout)
+function [p,pe,fig,ax] = polyCalib(x,y,n,printout)
 
 if nargin<4, printout=''; end
 
-p=polyfit(x,y,n);
+[p,S]=polyfit(x,y,n);
+pe=diag(inv(S.R)*inv(S.R)'*S.normr^2/S.df)';
 
 %% plot
 res=300;

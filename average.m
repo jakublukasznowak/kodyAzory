@@ -1,4 +1,5 @@
 % Jakub Nowak 201706
+% bla bla
 
 % Calculates column averages of specified type over selected number of points 
 %

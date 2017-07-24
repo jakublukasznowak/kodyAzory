@@ -28,9 +28,9 @@ s=size(x);
 
 
 %% calculate PSD
-window=[];
-noverlap=[];
-nfft=[];
+window=[]; % window=2^16;
+noverlap=[]; % noverlap=2^15;
+nfft=[]; % nfft=2^16;
 
 [psd,fv]=pwelch(x(:,1)-mean(x(:,1)),window,noverlap,nfft,f_samp);
 if s(2)>1

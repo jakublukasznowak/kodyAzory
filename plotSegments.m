@@ -16,7 +16,7 @@
 %    (3) ACTOS temperature: PT100, sonicTV, Vaisala HMP, DewPoint
 %    (4) humidity: LICOR, Vaisala HMP, DewPoint
 %    (5) wind velocity from sonic
-%    (6) platform velocity with respect to ground from inertial naviation
+%    (6) platform velocity with respect to ground from inertial navigation
 
 
 function plotSegments(actos,uft,timeRange,printout)

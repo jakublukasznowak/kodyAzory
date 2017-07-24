@@ -21,7 +21,7 @@ actos=load(actosfile);
 
 % load UFT
 temp=importUFTraw(rawfile,5,2); % range 5 V, 2 channels
-uft.upV=temp(:,1); uft.lowV=temp(:,2); % uft.lwcV=temp(:,3);
+uft.upV=temp(:,1); uft.lowV=temp(:,2); uft.lwcV=temp(:,3);
 clear temp
 uft.samp=20e3;
 
@@ -53,6 +53,8 @@ refTime=average(actos.time,actos.samp/ssamp,'s');
 % select time section
 refPress=average(actos.pressure,actos.samp/ssamp,'s');
 sel=(refPress<0.99*max(refPress));
+% n=min([length(baseSig) length(refSig)]);
+% sel=true(n,1);
 
 % find delay between base and reference
 delay=findDelay(refSig(sel),baseSig(sel),maxDelay*ssamp,[outputplots,filesep,prefix,'sync.png']);
@@ -85,6 +87,9 @@ baseLowV=average(uft.lowV,uft.samp/csamp,'s');
 
 % reference signal
 refT=average(actos.(refVar),actos.samp/csamp,'s');
+
+% own level 1 for PVM
+% actos.pvm1LWC=LWClev1(actos.pvmLWC,actos.samp);
 
 % cloudmask to avoid cloudy regions in calibration
 if isfield(actos,'pvm1LWC')
@@ -121,7 +126,7 @@ uft.time_av=average((0:length(uft.upT)-1)'/uft.samp+uft.startTime,M,'s');
 uft.SOD_av=uft.time_av+uft.startSOD-uft.startTime;
 uft.upT_av=average(uft.upT,M,'s');
 uft.lowT_av=average(uft.lowT,M,'s');
-%uft.LWC_av=average(uft.LWC,M,'s')
+uft.lwcV_av=average(uft.lwcV,M,'s');
 
 
 

@@ -1,4 +1,4 @@
-% Jakub Nowak 201706
+% Jakub Nowak 201707
 
 % Gives time lag of one signal versus another by maximizing correlation
 % coefficient.

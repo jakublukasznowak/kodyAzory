@@ -1,5 +1,4 @@
-% Jakub Nowak 201706
-% bla bla
+% Jakub Nowak 201707
 
 % Calculates column averages of specified type over selected number of points 
 %
@@ -9,6 +8,7 @@
 %    type - type of the average:
 %       'segment' - nonoverlaping averaging window
 %       'moving' - overlaping averaging window, preserves number of points
+%       'moving2' - moving average implemented in matlab function movmean
 %
 % OUTPUT
 %    av - averaged signals in columns
@@ -38,6 +38,9 @@ elseif strcmp(type,'segment') || strcmp(type,'s')
     for j=1:s(2)
         av(:,j)=mean(reshape(x(1:N*M,j),M,N),1)';
     end
+    
+elseif strcmp(type,'moving2') || strcmp(type,'m2')
+    av=movmean(x,M);
     
 else
     error('Invalid type :(')

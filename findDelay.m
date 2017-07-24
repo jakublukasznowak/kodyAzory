@@ -45,6 +45,7 @@ for i=1:Na
 %             [ones(max([0 lagV(j)]),1)*mean(sa(:,i)); sa(:,i); ones(max([0 -lagV(j)]),1)*mean(sa(:,i))]);
         tempcorr=corrcoef(sb(maxlag+1:Lb-maxlag),sa(maxlag+1-lagV(j):La-maxlag-lagV(j),i));
         corr(j,i)=tempcorr(1,2);
+        fprintf('%d out of %d done\n',j,2*maxlag+1)
     end
     [~,ind]=max(abs(corr(:,i)));
     dl(i)=lagV(ind);

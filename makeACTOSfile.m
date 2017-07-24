@@ -5,8 +5,9 @@
 % binary files.
 
 
-path='/home/pracownicy/jnowak/uft/dataWinningen/rawACTOS/20161006';
-output='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight02.mat';
+path='C:\jnowak\AZORES2017\UFT\actos-azores\20170715\Data';
+output='C:\jnowak\AZORES2017\UFT\20170715\actos_flight11_new';
+starttime=[2017 7 15 0 0 0];
 
 
 %% list of parameters
@@ -60,6 +61,7 @@ in={'pressure','final-serial_pressure_sensor.bin';
     'hotwire3','final-analog_Hot-Wire_16bit_III.bin';
     % UFT
     'uft','final-analog_UFT_16bit_II.bin';
+    'uftCal','UFTcal.lev1';
     % PVM
     'pvmLWC','final-analog_PVM_LWC_16bit.bin';
     'pvmPSA','final-analog_PVM_PSA_16bit.bin';
@@ -71,7 +73,7 @@ in={'pressure','final-serial_pressure_sensor.bin';
     'licorH2O','final-analog_LiCor_H2O_16bit.bin';
     'licorCO2','final-analog_LiCor_CO2_16bit.bin';
     % LYMAN
-    'lyman','final-analog_Lyman-alpha.bin';
+    'lyman','final-analog_Lyman-alpha_16bit.bin';
     % PT100
     'pt100','final-analog_PT100CL13_16bit.bin';
     'pt100R','PT100-Rosemount.lev1';
@@ -92,6 +94,10 @@ in={'pressure','final-serial_pressure_sensor.bin';
 %    'wvDD','WindVector-dd.lev1';
     % ???
     'density','AirDens.lev1';
+    % CPC
+    'cpc1','final-analog_CPC-I.bin';
+    'cpc2','final-analog_CPC-II.bin';
+    'cpc3','final-analog_CPC-III.bin';
     };
 
 vars=in(:,1);
@@ -106,6 +112,7 @@ for i=1:numel(files)
         f=fopen([path,filesep,files{i}]);
         x=fread(f,'double');
         data.(vars{i})=reshape(x,2,length(x)/2)';
+        fclose(f);
     else
         fprintf('No data for %s. Cannot find file %s\n',vars{i},files{i})
     end
@@ -125,8 +132,8 @@ for i=1:N
 end
 
 minLength=1e3;
-tstart=max(tmin(lengths>minLength));
-tend=min(tmax(lengths>minLength));
+tstart=max(tmin(lengths>minLength & tmax>tmin));
+tend=min(tmax(lengths>minLength & tmax>tmin));
 
 for i=1:N
     if lengths(i)>=minLength
@@ -147,6 +154,7 @@ syncdata.samp=100;
 syncdata.time=syncdata.gpsSOD-2*syncdata.gpsSOD(1)+syncdata.gpsSOD(2);
 % virtual temperature from sonic anemometer
 syncdata.sonicTV=(syncdata.sonicSOS.^2/331.3^2-1)*273.15;
+syncdata.starttime = datevec(datenum(starttime)+syncdata.gpsSOD(1)/3600/24);
 
 
 %% save ACTOS .mat file

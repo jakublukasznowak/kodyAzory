@@ -5,9 +5,9 @@
 % binary files.
 
 
-path='C:\jnowak\AZORES2017\UFT\actos-azores\20170715\Data';
-output='C:\jnowak\AZORES2017\UFT\20170715\actos_flight11_new';
-starttime=[2017 7 15 0 0 0];
+path='C:\jnowak\AZORES2017\ACTOS_raw\20170721\Data';
+output='C:\jnowak\AZORES2017\sandbox1\actos_flight16';
+starttime=[2017 7 21 0 0 0];
 
 
 %% list of parameters
@@ -155,6 +155,10 @@ syncdata.time=syncdata.gpsSOD-2*syncdata.gpsSOD(1)+syncdata.gpsSOD(2);
 % virtual temperature from sonic anemometer
 syncdata.sonicTV=(syncdata.sonicSOS.^2/331.3^2-1)*273.15;
 syncdata.starttime = datevec(datenum(starttime)+syncdata.gpsSOD(1)/3600/24);
+
+% NEW 20171005 - after change in LWC start procedure
+syncdata.pvm1LWC=syncdata.pvmLWC-median(syncdata.pvmLWC(1:3*60*syncdata.samp));
+syncdata.pvm1LWC(syncdata.pvm1LWC<0.02)=0;
 
 
 %% save ACTOS .mat file

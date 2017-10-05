@@ -6,13 +6,13 @@
 
 
 %prefix='flight01';
-prefix='flight02';
+prefix='flight16';
 %rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161005_1327.dat';
-rawfile='/home/pracownicy/jnowak/uft/dataWinningen/rawUFT/uft_20161006_1210.dat';
+rawfile='C:\jnowak\AZORES2017\UFT_raw\20170721\log00000.dat';
 %actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight01.mat';
-actosfile='/home/pracownicy/jnowak/uft/dataWinningen/actos_flight02.mat';
-output='/home/pracownicy/jnowak/uft/dataWinningen';
-outputplots='/home/pracownicy/jnowak/uft/raport/plots';
+actosfile='C:\jnowak\AZORES2017\sandbox1\actos_flight16';
+output='C:\jnowak\AZORES2017\sandbox1';
+outputplots='C:\jnowak\AZORES2017\sandbox1';
 
 
 
@@ -20,12 +20,14 @@ outputplots='/home/pracownicy/jnowak/uft/raport/plots';
 actos=load(actosfile);
 
 % load UFT
-temp=importUFTraw(rawfile,5,2); % range 5 V, 2 channels
+temp=importUFTraw(rawfile,5,3); % range 5 V, 2 channels
 uft.upV=temp(:,1); uft.lowV=temp(:,2); uft.lwcV=temp(:,3);
 clear temp
 uft.samp=20e3;
 
-
+% NEW 20171005 - after change in LWC start procedure
+uft.lwc1V=uft.lwcV-median(uft.lwcV(1:3*60*uft.samp));
+uft.lwc1V(uft.lwc1V<0.02)=0;
 
 %% time synchronization
 
@@ -37,8 +39,8 @@ uft.samp=20e3;
 % maxDelay - maximum time delay range to probe when maximizing correlation
 %    between signals
 
-baseVar='upV';
-refVar='sonicPRT';
+baseVar='lwc1V';
+refVar='pvm1LWC';
 ssamp=10; % [Hz]
 maxDelay=100; % [s]
 
@@ -110,7 +112,7 @@ delay=round(uft.sync.timeDelay*csamp);
 [lowP,lowPe]=polyCalib(baseLowV(sel-delay),refT(sel),1,[outputplots,filesep,prefix,'lowcalib.png']);
 uft.upT=polyval(upP,uft.upV);
 uft.lowT=polyval(lowP,uft.lowV);
-uft=rmfield(uft,{'upV','lowV'});
+%uft=rmfield(uft,{'upV','lowV'});
 
 % save info
 uft.calib=struct('ref',refVar,'samp',csamp,'maskLWCthresh',maskLWCthresh,...
@@ -128,6 +130,9 @@ uft.upT_av=average(uft.upT,M,'s');
 uft.lowT_av=average(uft.lowT,M,'s');
 uft.lwcV_av=average(uft.lwcV,M,'s');
 
+uft.upV_av=average(uft.upV,M,'s');
+uft.lowV_av=average(uft.lowV,M,'s');
+uft.lwc1V_av=average(uft.lwc1V,M,'s');
 
 
 %% save to file

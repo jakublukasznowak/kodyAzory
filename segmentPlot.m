@@ -6,7 +6,8 @@ if nargin<5, colors={1,2,3,4,5,6,7,8;1,2,3,4,5,6,7,8}; end
 
 N=size(y,2); Nax=size(y,1);
 if Nax>1
-    N1=sum(~isempty(y{1,:})); N2=sum(~isempty(y{2,:}));
+    N1=sum(cellfun(@(x) ~isempty(x),y(1,:),'UniformOutput',true));
+    N2=sum(cellfun(@(x) ~isempty(x),y(2,:),'UniformOutput',true));
 else
     N1=N;
 end
@@ -34,16 +35,17 @@ for i=1:N1
     plot(time{1,i},y{1,i},'Color',colors{1,i});
 end
 
-xlabel('Time [s]')
-ylabel(label{1})
+xlabel('Time [s]')%'Interpreter','latex')
+ylabel(label{1})%'Interpreter','latex')
 set(ax,'XLim',timeLim,'Box','off',...
     'XGrid','on','GridAlpha',0.5,'XMinorGrid','on','MinorGridAlpha',0.5,...
-    'YGrid','on','GridAlpha',0.5,'YMinorGrid','on','MinorGridAlpha',0.5)
+    'YGrid','on','GridAlpha',0.5,'YMinorGrid','on','MinorGridAlpha',0.5,...
+    'YLim',[floor(min(cell2mat(y(1,:)'))) ceil(max(cell2mat(y(1,:)')))])
 
 if ~isempty(vars)
     legStr=vars(1,1:N1);
     leg=legend(legStr,'Location','north','Orientation','horizontal');
-    set(leg,'Position',get(leg,'Position')+[0 0.05 0 0])
+    set(leg,'Position',get(leg,'Position')+[0 0.065 0 0])
 else
     leg=[];
 end
@@ -57,15 +59,16 @@ if Nax>1
         plot(time{2,i},y{2,i},'Color',colors{2,i});
     end
     
-    ylabel(label{2})
+    ylabel(label{2})%,'Interpreter','latex')
     set(ax2,'XLim',timeLim,'Box','off',...
         'YAxisLocation','right','XTickLabel',[],...
-        'XGrid','off','YGrid','off','XMinorGrid','off','YMinorGrid','off')
+        'XGrid','off','YGrid','off','XMinorGrid','off','YMinorGrid','off',...
+        'YLim',[min(y{2,i}) max(y{2,i})])
     
     if ~isempty(vars)
         legStr2=vars(2,1:N2);
         leg2=legend(legStr2,'Location','north','Orientation','horizontal');
-        set(leg2,'Position',get(leg2,'Position')+[0.13 0.05 0 0])
+        set(leg2,'Position',get(leg2,'Position')+[0.13 0.065 0 0])
         set(leg,'Position',get(leg,'Position')+[-0.13 0 0 0])
     else
         leg2=[];

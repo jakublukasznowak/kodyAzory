@@ -81,7 +81,7 @@ indA1_av=find(actos.time_av>=timeRange(1),1,'first');
 indA2_av=find(actos.time_av<=timeRange(2),1,'last');
 selA_av=indA1_av:indA2_av;
 
-[f1,ax1a,leg1a,ax1b,leg1b]=segmentPlot({uft.upT_av(selU),uft.lowT_av(selU),actos.sonicPRT_av(selA_av);actos.pvm1LWC(selA),[],[]},...
+[~,ax1a,leg1a,ax1b,leg1b]=segmentPlot({uft.upT_av(selU),uft.lowT_av(selU),actos.sonicPRT_av(selA_av);actos.pvm1LWC(selA),[],[]},...
     {uft.time_av(selU),uft.time_av(selU),actos.time_av(selA_av);actos.time(selA),[],[]},...
     {'upUFT 100Hz','lowUFT 100Hz','PRT 10Hz';'LWC','',''},{'Temperature {[}^{o}C]';'LWC [g{/m}^3]'},{2,3,4;1,[],[]});
 
@@ -97,7 +97,7 @@ else
     sonicLeg={'u','v','w'};
 end
 
-[f2,ax2a,leg2a,ax2b,leg2b]=segmentPlot(cat(1,sonic123p,{actos.baroheight(selA),[],[]}),...
+[~,ax2a,leg2a,ax2b,leg2b]=segmentPlot(cat(1,sonic123p,{actos.baroheight(selA),[],[]}),...
     repmat({actos.time(selA)},2,3),...
     cat(1,sonicLeg,{'baroheight','',''}),...
     {'Sonic velocity [m/s]';'Baroheight [m]'},{1,2,3;'g',[],[]});
@@ -108,12 +108,45 @@ res=300;
 
 if strcmp(printout(end-2:end),'png')
     
-    names={'lwc','uft','temp','humid','sonic','imar'};
-    fM={f1,f2,f3,f4,f5,f6};
+    fpp=2;
     
-    for i=1:numel(fM)
-        print(fM{i},[printout(1:end-4),names{i}],'-dpng',['-r',num2str(res)])
-        %eval(sprintf('print(f%d,%s,''-dpng'',''-r%d'')',i,[printout(1:end-4),names{i}],res))
+    %axM={ax1a,ax1b;ax2,[];ax3,[];ax4,[];ax5,[];ax6,[]};
+    %legM={leg1a,leg1b;leg2,[];leg3,[];leg4,[];leg5,[];leg6,[]};
+    axM={ax1a,ax1b;ax2a,ax2b};
+    legM={leg1a,leg1b;leg2a,leg2b};
+    
+    N=size(axM,1);
+    
+    segmentStr=sprintf('Segment %04d-%04ds',round(timeRange(1)),round(timeRange(2)));
+    %titles={'LWC and Pressure','Temperature UFT-2','Temperature ACTOS',...
+    %    'Humidity','Wind velocity','Platform velocity'};
+    titles={'Temperature and LWC','Sonic wind and baroheight'};
+        
+    for n=1:N
+            if strcmp(printout(end-4),'H')
+                ff=figure('Color','white','PaperUnits','centimeters',...
+                    'PaperSize',[29.7 21/fpp],'PaperPosition',[2 1 29.7-4 21/fpp-2]);
+                titles=repmat({''},size(titles));
+            else
+                ff=figure('Color','white','PaperUnits','centimeters',...
+                    'PaperSize',[21 29.7/fpp],'PaperPosition',[2 1 21-4 29.7/fpp-2]);
+                titles=cellfun(@(x,y) cat(2,x,y),repmat({[segmentStr,' ']},size(titles)),titles,'UniformOutput',false);
+            end
+        
+            if ~isempty(axM{n,2})
+                subplot(1,1,1,axM{n,2},'Parent',ff)
+                set(axM{n,2},'Position',[0.07 0.13 1-0.07-0.07 1-0.13-0.07],...
+                    'FontSize',10,'YAxisLocation','right','XTickLabel',[],...
+                    'XGrid','off','YGrid','off','XMinorGrid','off','YMinorGrid','off')
+                legM{n,2}.Position=legM{n,2}.Position+[0 -0.01 0 0];
+            end
+            subplot(1,1,1,axM{n,1},'Parent',ff)
+            set(axM{n,1},'Position',[0.07 0.13 1-0.07-0.07 1-0.13-0.07],...
+                'FontSize',10,'Title',text(0,0,titles{n}),...
+                'XMinorGrid','off','YMinorGrid','off')
+            legM{n,1}.Position=legM{n,1}.Position+[0 -0.01 0 0];
+            
+            print(ff,[printout(1:end-4),num2str(n,'_%02d')],'-dpng',['-r',num2str(res)])
     end
     
 elseif strcmp(printout(end-2:end),'pdf')
@@ -147,13 +180,13 @@ elseif strcmp(printout(end-2:end),'pdf')
             if ~isempty(axM{(p-1)*fpp+i,2})
                 subplot(fpp,1,i,axM{(p-1)*fpp+i,2},'Parent',ff)
                 set(axM{(p-1)*fpp+i,2},'Position',[0.04 0.08/fpp+(fpp-i)/fpp 1-0.04-0.04 1/fpp-0.08/fpp-0.08/fpp],...
-                    'FontSize',8,'YAxisLocation','right','XTickLabel',[],...
+                    'FontSize',10,'YAxisLocation','right','XTickLabel',[],...
                     'XGrid','off','YGrid','off','XMinorGrid','off','YMinorGrid','off')
                 legM{(p-1)*fpp+i,2}.Position=legM{(p-1)*fpp+i,2}.Position+[0 (1-i)/fpp 0 0];
             end
             subplot(fpp,1,i,axM{(p-1)*fpp+i,1},'Parent',ff)
             set(axM{(p-1)*fpp+i,1},'Position',[0.04 0.08/fpp+(fpp-i)/fpp 1-0.04-0.04 1/fpp-0.08/fpp-0.08/fpp],...
-                'FontSize',8,'Title',text(0,0,titles{(p-1)*fpp+i}))
+                'FontSize',10,'Title',text(0,0,titles{(p-1)*fpp+i}))
             legM{(p-1)*fpp+i,1}.Position=legM{(p-1)*3+i,1}.Position+[0 (1-i)/fpp 0 0];
         end
         
